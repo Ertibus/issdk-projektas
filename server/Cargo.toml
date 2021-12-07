@@ -18,4 +18,4 @@ env_logger = "0.9.0"
 chrono = "0.4.19"
 tera = "1.15.0"
 # SQLite
-r2d2_sqlite = "0.14"
+r2d2_sqlite = "0.19"

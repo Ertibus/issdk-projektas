@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrapper">
+    <div class="dash-nav">
+    </div>
+    <div class="wrapper">
+        <table class="about-table">
+            <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Admin</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.is_admin }}</td>
+            <td>
+            <form action="users/delete/{{user.id}}" mehod="post">
+                <input id="btn_delete_u" type="submit" class="table-btn"  type="submit" value="❌">
+            </form>
+            </td>
+            {% if not user.is_admin %}
+            <td>
+            <form action="users/promote/{{user.id}}" mehod="post">
+                <input id="btn_promote_u" type="submit" class="table-btn"  type="submit" value="⬆️">
+            </form>
+            </td>
+            {% else %}
+            <td>
+            <form action="users/demote/{{user.id}}" mehod="post">
+                <input id="btn_promote_u" type="submit" class="table-btn"  type="submit" value="⬇️">
+            </form>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock content %}

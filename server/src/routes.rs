@@ -4,6 +4,7 @@ use actix_web::http::{StatusCode};
 use actix_web::{error, web, get, Result};
 
 pub mod auth;
+pub mod dashboard;
 
 #[get("/")]
 pub async fn index(
@@ -12,13 +13,7 @@ pub async fn index(
 ) -> Result<HttpResponse> {
     let mut ctx = tera::Context::new();
 
-    if let Some(id) = id.identity() {
-        ctx.insert("is_loggedin", &true);
-        ctx.insert("username", &id);
-    } else {
-        ctx.insert("is_loggedin", &false);
-        ctx.insert("username", "");
-    }
+    ctx.insert("is_loggedin", &(None != id.identity()));
 
     let body = tmpl.render("index.html", &ctx)
             .map_err(|_| error::ErrorInternalServerError("Template error"))?;
@@ -26,5 +21,4 @@ pub async fn index(
     Ok(HttpResponse::build(StatusCode::OK)
        .content_type("text/html; charset=utf-8")
     .body(body))
-
 }
