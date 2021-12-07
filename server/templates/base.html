@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Devclectic</title>
+    <meta name="description" content="A blog about programming and game development">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" />
+</head>
+<body>
+<!--[if lt IE 8]>
+    <p class="browserupgrade">
+    You are using an <strong>outdated</strong> browser. Please
+    <a href="http://browsehappy.com/">upgrade your browser</a> to improve
+    your experience.
+    </p>
+<![endif]-->
+<header>
+<nav class="wrapper navbar">
+    <a class="nav-item" href="../index">
+        <img id="main-logo-img" src="/logo.svg" alt="Dream DevBlog logo">
+    </a>
+    <ul class="nav-list right">
+        <li class="nav-item">
+            <a href="/">Home</a>
+        </li>
+        <li class="nav-item">
+            <a href="#">About</a>
+        </li>
+        {% if not is_loggedin %}
+        <li class="nav-item">
+            <a href="/login">Login</a>
+        </li>
+        <li class="nav-item">
+            <a href="/register">Register</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a href="/dashboard">{{ username }}</a>
+        </li>
+        <li class="nav-item">
+            <a href="/logout">Logout</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+</header>
+{% block content %}
+{% endblock content %}
+<footer>
+    <p>©2021 All rights reserverd.</p>
+    <p>Made by Emilis Margevičius.</p>
+</footer>
+</body>
+</html>

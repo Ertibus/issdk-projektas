@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrapper">
+<div class="err">
+    {{ failed }}
+</div>
+<form id="login" action="/login" method="POST">
+    <label for="username">Username</label>
+    <input id="username" type="text" name="username" value="" autocomplete="off">
+    <label for="password">Password</label>
+    <input id="password" type="text" name="password" value="" autocomplete="off">
+    <input id="btn_login" class="btn" onclick="this.value='Processing..';this.form.submit(); return true;" type="submit" value="Login">
+</form>
+</div>
+{% endblock content %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrapper">
+<div class="err">
+    {{ failed }}
+</div>
+<form id="register" action="/register" method="POST">
+    <label for="username">Username:</label>
+    <input id="username" type="text" name="username" value="" autocomplete="off">
+    <label for="email">Email:</label>
+    <input id="email" type="text" name="email" value="" autocomplete="off">
+    <label for="password">Password:</label>
+    <input id="password" type="password" name="password" value="" autocomplete="off">
+    <label for="c_password">Confirm Password:</label>
+    <input id="c_password" type="password" name="password_confirm" value="" autocomplete="off">
+    <input id="btn_register" class="btn" onclick="this.value='Processing..';this.form.submit(); return true;" type="submit" value="Register">
+</form>
+</div>
+{% endblock content %}

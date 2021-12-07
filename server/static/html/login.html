@@ -1,0 +1,54 @@
+
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Login | Devclectic</title>
+        <meta name="description" content="Where all (development) knowledge gathers">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+
+        <!-- <link rel="apple-touch-icon" href="/apple-touch-icon.png"> -->
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">
+            You are using an <strong>outdated</strong> browser. Please
+            <a href="http://browsehappy.com/">upgrade your browser</a> to improve
+            your experience.
+            </p>
+        <![endif]-->
+        <nav class="navbar">
+            <ul class="nav-list right">
+                <li class="nav-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#">About</a>
+                </li>
+                <li class="nav-item current">
+                    <a href="/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/register">Register</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="wrapper">
+            <form id="login" action="/login" method="POST">
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" value="" autocomplete="off">
+                <label for="password">Password</label>
+                <input id="password" type="text" name="password" value="" autocomplete="off">
+                <input id="btn_login" onclick="this.value='Processing..';this.form.submit(); return true;" type="submit" value="Login">
+            </form>
+        </div>
+
+        <footer>
+            <p>©2021 All rights reserverd.</p>
+            <p>Made by Emilis Margevičius.</p>
+        </footer>
+    </body>
+</html>
