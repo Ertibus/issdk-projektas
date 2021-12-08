@@ -1,0 +1,16 @@
+<!doctype html>
+<div class="dash-nav">
+    <ul class="dash-list">
+        <li class="dash-item">
+            <a href="/dashboard/options">Options</a>
+        </li>
+        {% if is_admin %}
+        <li class="dash-item">
+            <a href="/dashboard">Articles</a>
+        </li>
+        <li class="dash-item">
+            <a href="/dashboard/users">Users</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>

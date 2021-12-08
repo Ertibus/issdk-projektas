@@ -69,6 +69,8 @@ async fn main() -> std::io::Result<()> {
                 web::scope("/dashboard")
                     .service(web::resource("")
                         .route(web::get().to(routes::dashboard::dashboard)))
+                    .service(web::resource("/options")
+                        .route(web::get().to(routes::dashboard::dashboard_options)))
                     .service(web::scope("/users")
                         .service(web::resource("")
                             .route(web::get().to(routes::dashboard::dashboard_users)))

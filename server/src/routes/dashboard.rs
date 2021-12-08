@@ -14,28 +14,60 @@ pub async fn dashboard(
     let pool = db.clone();
 
     if let Some(id) = id.identity() {
-        if let Some(_) = session.get::<bool>("is_admin")? {
-            return Ok(HttpResponse::Found().header("location", "/dashboard/users").finish());
-        } else {
-            let res = web::block(move || {
-                let conn = pool.get().unwrap();
-                repo::check_permissions(conn, id)
-            }).await
-            .map_err(|err| {
-                return Ok(HttpResponse::InternalServerError().body(err.to_string()));
-            })
-            .map(|is_admin| {
-                session.set("is_admin", &is_admin)?;
-                return Ok(HttpResponse::Found().header("location", "/dashboard/users").finish());
-            });
+        let res = web::block(move || {
+            let conn = pool.get().unwrap();
+            repo::check_permissions(conn, id)
+        }).await
+        .map_err(|err| {
+            return Ok(HttpResponse::InternalServerError().body(err.to_string()));
+        })
+        .map(|is_admin| {
+            session.set("is_admin", &is_admin)?;
+            return Ok(HttpResponse::Found().header("location", "/dashboard/options").finish());
+        });
 
-            match res {Ok(res) => res, Err(res) => res,}
-        }
-
+        match res {Ok(res) => res, Err(res) => res,}
     } else {
         return Ok(HttpResponse::Unauthorized().body("Unauthorized access"));
     }
 }
+
+pub async fn dashboard_options(
+    id: Identity,
+    tmpl: web::Data<tera::Tera>,
+    db: web::Data<Pool>,
+    session: Session,
+) -> Result<HttpResponse> {
+    let pool = db.clone();
+
+    if let Some(_id) = id.identity() {
+        if let Some(is_admin) = session.get::<bool>("is_admin")? {
+
+            let res = web::block(move || {
+                let conn = pool.get().unwrap();
+                repo::get_users(conn)
+            }).await?;
+
+
+            let mut ctx = tera::Context::new();
+            ctx.insert("is_loggedin", &true);
+            ctx.insert("is_admin", &is_admin);
+            ctx.insert("users", &res);
+
+            let render = tmpl.render("dashboard_options.html", &ctx)
+            .map_err(|err| error::ErrorInternalServerError(format!("Template error: {:?}", err.to_string()))).expect("Test");
+
+            return Ok(HttpResponse::build(StatusCode::OK)
+                .content_type("text/html; charset=utf-8")
+                .body(render));
+        } else {
+            return Ok(HttpResponse::Found().header("location", "/dashboard").finish());
+        }
+    } else {
+        return Ok(HttpResponse::Unauthorized().body("Unauthorized access"));
+    }
+}
+
 
 pub async fn dashboard_users(
     id: Identity,
@@ -57,7 +89,7 @@ pub async fn dashboard_users(
 
             let mut ctx = tera::Context::new();
             ctx.insert("is_loggedin", &true);
-            ctx.insert("is_admin", &is_admin);
+            ctx.insert("is_admin", &false);
             ctx.insert("users", &res);
 
             let render = tmpl.render("dashboard_users.html", &ctx)

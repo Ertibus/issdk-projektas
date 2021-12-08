@@ -56,7 +56,7 @@ pub async fn login(
         }
           id.remember(user.username.to_owned());
           session.set("login_failure", "").unwrap();
-          HttpResponse::MovedPermanently().header("location", "/").finish()
+          HttpResponse::Found().header("location", "/").finish()
       });
 
     match res {Ok(res) => res, Err(res) => res,}
@@ -72,7 +72,7 @@ pub async fn register_form(
   tmpl: web::Data<tera::Tera>,
   session: Session,
 ) -> Result<HttpResponse> {
-  if let Some(_id) = id.identity() {return Ok(HttpResponse::MovedPermanently().header("location", "/").finish());}
+  if let Some(_id) = id.identity() {return Ok(HttpResponse::Found().header("location", "/").finish());}
 
   let mut ctx = tera::Context::new();
   ctx.insert("is_logedin", &false);
@@ -119,7 +119,7 @@ pub async fn register(
       })
       .map(|_| {
           session.set("register_failure", "").unwrap();
-          HttpResponse::MovedPermanently().header("location", "/login").finish()
+          HttpResponse::Found().header("location", "/login").finish()
       });
 
     match res {Ok(res) => res, Err(res) => res,}
