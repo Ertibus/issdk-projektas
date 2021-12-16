@@ -1,4 +1,3 @@
-use crate::models::LoginForm;
 use crate::models::CreateArticleForm;
 use crate::models::Article;
 use actix_session::Session;

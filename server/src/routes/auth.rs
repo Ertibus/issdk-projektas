@@ -1,6 +1,5 @@
 use serde_json::Value::Bool;
 use serde_json::Value;
-use std::collections::HashMap;
 use actix_web::client::Client;
 use crate::repo::register_user;
 use crate::models::SlimUser;
@@ -103,7 +102,7 @@ pub async fn register(
     let pool = db.clone();
     let data = params.clone();
 
-    let mut client = Client::default();
+    let client = Client::default();
     let resp = client.get(format!("https://mailcheck.p.rapidapi.com/?domain={}", data.email))
         .header("x-rapidapi-host", "mailcheck.p.rapidapi.com")
         .header("x-rapidapi-key", "4f21a0e8e2msh739ef3c426b9383p107fb9jsn513436059c77")
@@ -121,12 +120,6 @@ pub async fn register(
           return HttpResponse::Found().header("location", "/register").finish();
         }
     }
-/*
-    if resp {
-        return HttpResponse::Found().header("location", "/register").finish();
-    }
-*/
-
     if data.password != data.password_confirm {
         session.set("register_failure", "Password do not match").unwrap();
         return HttpResponse::Found().header("location", "/register").finish();
