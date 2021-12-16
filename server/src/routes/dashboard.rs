@@ -1,3 +1,4 @@
+use crate::models::LoginForm;
 use crate::models::CreateArticleForm;
 use crate::models::Article;
 use actix_session::Session;
@@ -277,51 +278,22 @@ pub async fn dashboard_article_focus(
 
     if let Some(_id) = id.identity() {
         if let Some(_is_admin) = session.get::<bool>("is_admin")? {
-            let res = web::block(move || {
-                let conn = pool.get().unwrap();
-                repo::get_article(conn, uid)
-            }).await?;
+            if uid != -1 {
+                let res = web::block(move || {
+                    let conn = pool.get().unwrap();
+                    repo::get_article(conn, uid)
+                }).await?;
+                session.set("article_focus", &res.id)?;
+            } else {
+                session.set("article_focus", &-1)?;
+            }
 
-            session.set("article_focus", &res.id)?;
             return Ok(HttpResponse::Found().header("location", "/dashboard/articles").finish());
         } else {
             return Ok(HttpResponse::Found().header("location", "/dashboard").finish());
         }
     } else {
         return Ok(HttpResponse::Unauthorized().body("Unauthorized access"));
-    }
-}
-pub async fn dashboard_articles_post(
-    id: Identity,
-    params: web::Form<CreateArticleForm>,
-    db: web::Data<Pool>,
-    session: Session,
-) -> HttpResponse {
-    let pool = db.clone();
-    let data = params.clone();
-
-    if let Some(id) = id.identity() {
-        let _res = web::block(move || {
-            let conn = pool.get().unwrap();
-            let user_data = Article{
-                id: -1,
-                owner: id,
-                title: data.title,
-                description: data.description,
-            };
-            repo::post_article(conn, user_data)
-        }).await
-        .map_err(|err| {
-            session.set("register_failure", &err.to_string()).unwrap();
-            return HttpResponse::Found().header("location", "/register").finish();
-        })
-        .map(|_| {
-            session.set("register_failure", "").unwrap();
-            return HttpResponse::Found().header("location", "/login").finish();
-        });
-        return HttpResponse::Found().header("location", "/login").finish();
-    } else {
-        return HttpResponse::Unauthorized().body("Unauthorized access");
     }
 }
 
@@ -348,13 +320,13 @@ pub async fn dashboard_article_post(
         }).await
         .map_err(|err| {
             session.set("register_failure", &err.to_string()).unwrap();
-            return HttpResponse::Found().header("location", "/register").finish();
+            return HttpResponse::Found().header("location", "/dashboard/articles").finish();
         })
         .map(|_| {
             session.set("register_failure", "").unwrap();
-            return HttpResponse::Found().header("location", "/login").finish();
+            return HttpResponse::Found().header("location", "/dashboard/articles").finish();
         });
-        return HttpResponse::Found().header("location", "/login").finish();
+        return HttpResponse::Found().header("location", "/dashboard/articles").finish();
     } else {
         return HttpResponse::Unauthorized().body("Unauthorized access");
     }
@@ -375,13 +347,13 @@ pub async fn dashboard_article_del(
         }).await
         .map_err(|err| {
             session.set("register_failure", &err.to_string()).unwrap();
-            return HttpResponse::Found().header("location", "/register").finish();
+            return HttpResponse::Found().header("location", "/dashboard/articles").finish();
         })
         .map(|_| {
             session.set("register_failure", "").unwrap();
-            return HttpResponse::Found().header("location", "/login").finish();
+            return HttpResponse::Found().header("location", "/dashboard/articles").finish();
         });
-        return HttpResponse::Found().header("location", "/login").finish();
+        return HttpResponse::Found().header("location", "/dashboard/articles").finish();
     } else {
         return HttpResponse::Unauthorized().body("Unauthorized access");
     }

@@ -10,10 +10,6 @@
         <h1 class="card-title">{{article.title}}<span class="card-author"> By {{article.owner}}</span></h1>
         <div class="card-body">{{article.description}}</div>
     </a>
-    <a class="card" href="/article/{{article.id}}">
-        <h1 class="card-title">{{article.title}}<span class="card-author"> By {{article.owner}}</span></h1>
-        <div class="card-body">{{article.description}}</div>
-    </a>
     {% endfor %}
     </div>
 {% endblock content %}

@@ -47,22 +47,3 @@ pub struct CreateArticleForm {
     pub title: String,
     pub description: String,
 }
-
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Comment {
-    pub id: i32,
-    pub owner_id: i32,
-    pub ref_id: i32,
-    pub description: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct SlimComment {
-    pub description: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreateCommentForm {
-    pub description: String,
-}

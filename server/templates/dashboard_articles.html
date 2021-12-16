@@ -26,13 +26,23 @@
         </td>
         </tr>
         {% endfor %}
+        <tr>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+        <td>
+        <form action="articles/-1" method="get">
+            <input id="btn_inspect" type="submit" class="table-btn"  type="submit" value="⬆️">
+        </form>
+        </td>
+        </tr>
         </table>
     </div>
     <div class="wrapper">
         <div class="err">
             {{ failed }}
         </div>
-        <form name="article_form" id="article-form" action="/articles/{{focus.id}}" method="POST">
+        <form name="article_form" id="article-form" action="/dashboard/articles/{{focus.id}}" method="POST">
             <label class="article-label" for="title">Title:</label>
             <input class="article-input" id="title" type="text" name="title" value="{{focus.title}}" autocomplete="off" required>
             <label class="article-label" for="description">Content:</label>
