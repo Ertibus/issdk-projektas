@@ -5,11 +5,11 @@
     {{ failed }}
 </div>
 <form id="login" action="/login" method="POST">
-    <label for="username">Username</label>
-    <input id="username" type="text" name="username" value="" autocomplete="off">
-    <label for="password">Password</label>
-    <input id="password" type="text" name="password" value="" autocomplete="off">
-    <input id="btn_login" class="btn" onclick="this.value='Processing..';this.form.submit(); return true;" type="submit" value="Login">
+    <label class="register-label" for="username">Username</label>
+    <input class="register-input" id="username" type="text" name="username" value="" autocomplete="off">
+    <label class="register-label" for="password">Password</label>
+    <input class="register-input" id="password" type="password" name="password" value="" autocomplete="off">
+    <input class="register-input" id="btn_login" class="btn" onclick="this.value='Processing..';this.form.submit(); return true;" type="submit" value="Login">
 </form>
 </div>
 {% endblock content %}

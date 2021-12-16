@@ -7,9 +7,13 @@ CREATE TABLE user(
 
 CREATE TABLE IF NOT EXISTS article(
     id INTEGER PRIMARY KEY,
-    owner_id INTEGER,
-    document_path TEXT NOT NULL
+    owner TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL
 );
 
 INSERT OR IGNORE INTO user(id, username, password, is_admin)
 VALUES (0, 'root', 'toor', 1);
+
+INSERT OR IGNORE INTO article(id, owner, title, description)
+VALUES (0, 'root', 'Example', 'This is a test case. This part is the description');

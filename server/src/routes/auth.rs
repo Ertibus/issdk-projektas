@@ -1,3 +1,7 @@
+use serde_json::Value::Bool;
+use serde_json::Value;
+use std::collections::HashMap;
+use actix_web::client::Client;
 use crate::repo::register_user;
 use crate::models::SlimUser;
 use actix_session::Session;
@@ -13,7 +17,7 @@ pub async fn login_form(
   tmpl: web::Data<tera::Tera>,
   session: Session,
 ) -> Result<HttpResponse> {
-  if let Some(_id) = id.identity() {return Ok(HttpResponse::MovedPermanently().header("location", "/").finish());}
+  if let Some(_id) = id.identity() {return Ok(HttpResponse::Found().header("location", "/").finish());}
 
   let mut ctx = tera::Context::new();
   ctx.insert("is_logedin", &false);
@@ -99,12 +103,36 @@ pub async fn register(
     let pool = db.clone();
     let data = params.clone();
 
+    let mut client = Client::default();
+    let resp = client.get(format!("https://mailcheck.p.rapidapi.com/?domain={}", data.email))
+        .header("x-rapidapi-host", "mailcheck.p.rapidapi.com")
+        .header("x-rapidapi-key", "4f21a0e8e2msh739ef3c426b9383p107fb9jsn513436059c77")
+        .send()
+        .await
+        .unwrap()
+        .body()
+        .await
+        .unwrap();
+
+    let json: Result<Value, _> = serde_json::from_slice(&resp);
+    if let Bool(block) = json.unwrap().get("block").unwrap() {
+        if *block {
+          session.set("register_failure", "Invalid email").unwrap();
+          return HttpResponse::Found().header("location", "/register").finish();
+        }
+    }
+/*
+    if resp {
+        return HttpResponse::Found().header("location", "/register").finish();
+    }
+*/
+
     if data.password != data.password_confirm {
         session.set("register_failure", "Password do not match").unwrap();
         return HttpResponse::Found().header("location", "/register").finish();
     }
 
-    let res = web::block(move || {
+    let _res = web::block(move || {
         let conn = pool.get().unwrap();
         let user_data = SlimUser{
           username: data.username,
@@ -115,12 +143,11 @@ pub async fn register(
     }).await
       .map_err(|err| {
         session.set("register_failure", &err.to_string()).unwrap();
-        HttpResponse::Found().header("location", "/register").finish()
+        return HttpResponse::Found().header("location", "/register").finish();
       })
       .map(|_| {
           session.set("register_failure", "").unwrap();
-          HttpResponse::Found().header("location", "/login").finish()
+          return HttpResponse::Found().header("location", "/login").finish();
       });
-
-    match res {Ok(res) => res, Err(res) => res,}
+      return HttpResponse::Found().header("location", "/login").finish();
 }

@@ -14,7 +14,6 @@ use actix_web::middleware::Logger;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    std::env::set_var("RUST_LOG", "actix_web=info");
     // Initiates error logger
     env_logger::init();
 
@@ -49,6 +48,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::default())
             // Services
             .service(routes::index)
+            .service(routes::create_article)
             .service(
                 web::scope("/login")
                     .service(web::resource("")
@@ -79,8 +79,22 @@ async fn main() -> std::io::Result<()> {
                         .service(web::resource("/promote/{uid}")
                             .route(web::get().to(routes::dashboard::dashboard_user_promote)))
                         .service(web::resource("/demote/{uid}")
-                            .route(web::get().to(routes::dashboard::dashboard_user_demote)))
-            ))
+                                 .route(web::get().to(routes::dashboard::dashboard_user_demote)))
+                    )
+                    .service(web::scope("/articles")
+                        .service(web::resource("")
+                            .route(web::get().to(routes::dashboard::dashboard_articles))
+                            .route(web::post().to(routes::dashboard::dashboard_articles_post))
+                        )
+                        .service(web::resource("{uid}")
+                            .route(web::get().to(routes::dashboard::dashboard_article_focus))
+                            .route(web::post().to(routes::dashboard::dashboard_article_post))
+                            .route(web::post().to(routes::dashboard::dashboard_article_del))
+                        )
+                        .service(web::resource("/delete/{uid}")
+                                 .route(web::get().to(routes::dashboard::dashboard_user_del)))
+                    )
+            )
             .service(Files::new("/", "./server/static/"))
     })
     .bind("127.0.0.1:8080")?

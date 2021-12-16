@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrapper frow">
+    {% include "dashnav.html"  %}
+    <div class="wrapper">
+        <table class="about-table">
+            <tr>
+            <th>ID</th>
+            <th>Owner</th>
+            <th>Title</th>
+        </tr>
+        {% for article in articles %}
+        <tr>
+            <td>{{ article.id }}</td>
+            <td>{{ article.owner }}</td>
+            <td>{{ article.title }}</td>
+        <td>
+        <form action="articles/{{article.id}}" method="get">
+            <input id="btn_inspect" type="submit" class="table-btn"  type="submit" value="⬆️">
+        </form>
+        </td>
+        <td>
+        <form action="articles/delete/{{article.id}}" method="post">
+            <input id="btn_delete" type="submit" class="table-btn"  type="submit" value="❌">
+        </form>
+        </td>
+        </tr>
+        {% endfor %}
+        </table>
+    </div>
+    <div class="wrapper">
+        <div class="err">
+            {{ failed }}
+        </div>
+        <form name="article_form" id="article-form" action="/articles/{{focus.id}}" method="POST">
+            <label class="article-label" for="title">Title:</label>
+            <input class="article-input" id="title" type="text" name="title" value="{{focus.title}}" autocomplete="off" required>
+            <label class="article-label" for="description">Content:</label>
+            <textarea class="article-input" id="description" cols="50" rows="10" name="description" autocomplete="off" required>{{focus.description}}</textarea>
+
+            <input class="register-input" id="btn_create" class="btn" onclick="this.value='Processing..';this.form.submit(); return true;" type="submit" value="Create">
+        </form>
+        </div>
+    </div>
+{% endblock content %}

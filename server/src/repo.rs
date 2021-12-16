@@ -1,3 +1,4 @@
+use crate::models::Article;
 use crate::models::User;
 use crate::models::SlimUser;
 
@@ -72,4 +73,81 @@ pub fn check_permissions(conn: Connection, username: String) -> Result<bool, Str
         Ok(admin) => Ok(admin),
         Err(_) => Err(format!("User '{}' was not found", &username))
     }
+}
+
+
+pub fn get_all_articles(conn: Connection, ) -> Result<Vec<Article>, String> {
+    let mut stmt = conn.prepare("SELECT * FROM article").unwrap();
+    let results = stmt.query_map([], |row| {
+        Ok(Article{
+            id: row.get(0)?,
+            owner: row.get(1)?,
+            title: row.get(2)?,
+            description: row.get(3)?,
+        })
+    });
+
+    let mut retval: Vec<Article> = Vec::new();
+    for row in results.unwrap() {
+        retval.push(row.unwrap());
+    }
+    Ok(retval)
+}
+
+pub fn get_articles(conn: Connection, id: String ) -> Result<Vec<Article>, String> {
+    let mut stmt = conn.prepare("SELECT * FROM article WHERE owner=$1").unwrap();
+    let results = stmt.query_map(&[&id], |row| {
+        Ok(Article{
+            id: row.get(0)?,
+            owner: row.get(1)?,
+            title: row.get(2)?,
+            description: row.get(3)?,
+        })
+    });
+
+    let mut retval: Vec<Article> = Vec::new();
+    for row in results.unwrap() {
+        retval.push(row.unwrap());
+    }
+    Ok(retval)
+}
+
+
+pub fn get_article(conn: Connection, id: i32) -> Result<Article, String> {
+    match conn.query_row("SELECT * FROM article WHERE id=$1", &[&id], |row| {
+        Ok(Article{
+            id: row.get(0)?,
+            owner: row.get(1)?,
+            title: row.get(2)?,
+            description: row.get(3)?,
+        })
+    }) {
+        Ok(res) => Ok(res),
+        Err(_) => Err(format!("Article '{}' was not found", &id))
+    }
+}
+
+pub fn post_article(conn: Connection, data: Article) -> Result<String, String> {
+    if data.id != -1 {
+        match conn.query_row("SELECT * FROM article WHERE id=$1", &[&data.id], |_| {Ok(" ")}) {
+            Ok(_) => {
+                conn.execute("UPDATE article SET title=$1, description=$2 WHERE id=$3", &[&data.title, &data.description, &data.id.to_string()]).unwrap();
+                return Ok("".to_string())
+            }
+            Err(_) => {  }
+        };
+    }
+
+    match conn.execute(
+        "INSERT INTO article (owner, title, description) VALUES ($0, $1, $2)",
+        &[&data.owner, &data.title, &data.description]
+    ) {
+        Ok(_) => Ok("".to_string()),
+        Err(err) => Err(format!("Failed to insert article {:?}", err.to_string())),
+    }
+}
+
+pub fn del_article(conn: Connection, id: i32) -> Result<(), String> {
+    conn.execute("DELETE FROM article WHERE id=$1", &[&id]).unwrap();
+    Ok(())
 }

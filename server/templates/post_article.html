@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrapper center-view">
+<div class="err">
+    {{ failed }}
+</div>
+<form name="article_form" id="article-form" action="/articles/{{focus.id}}" method="post">
+    <label class="article-label" for="title">title:</label>
+    <input class="article-input" id="title" type="text" name="title" value="{{focus.title}}" autocomplete="off" required>
+    <label class="article-label" for="description">content:</label>
+    <textarea class="article-input" id="description" cols="50" rows="10" name="description" autocomplete="off" required>{{focus.description}}</textarea>
+
+    <input class="register-input" id="btn_create" class="btn" onclick="this.value='processing..';this.form.submit(); return true;" type="submit" value="create">
+</form>
+</div>
+{% endblock content %}

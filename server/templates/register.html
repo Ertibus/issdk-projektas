@@ -5,15 +5,15 @@
     {{ failed }}
 </div>
 <form name="registration" id="register" onsubmit="return registration();" action="/register" method="POST">
-    <label for="username">Username:</label>
-    <input id="username" type="text" name="username" value="" autocomplete="off" required>
-    <label for="email">Email:</label>
-    <input id="email" type="text" name="email" value="" autocomplete="off" required>
-    <label for="password">Password:</label>
-    <input id="password" type="password" name="password" value="" autocomplete="off" required>
-    <label for="c_password">Confirm Password:</label>
-    <input id="c_password" type="password" name="password_confirm" value="" autocomplete="off" required>
-    <input id="btn_register" class="btn" onclick="this.value='Processing..';this.form.submit(); return true;" type="submit" value="Register">
+    <label class="register-label" for="username">Username:</label>
+    <input class="register-input" id="username" type="text" name="username" value="" autocomplete="off" required>
+    <label class="register-label" for="email">Email:</label>
+    <input class="register-input" id="email" type="text" name="email" value="" autocomplete="off" required>
+    <label class="register-label" for="password">Password:</label>
+    <input class="register-input" id="password" type="password" name="password" value="" autocomplete="off" required>
+    <label class="register-label" for="c_password">Confirm Password:</label>
+    <input class="register-input" id="c_password" type="password" name="password_confirm" value="" autocomplete="off" required>
+    <input class="register-input" id="btn_register" class="btn" onclick="this.value='Processing..';this.form.submit(); return true;" type="submit" value="Register">
 </form>
 </div>
 <script src="js/validator_registration.js"></script>

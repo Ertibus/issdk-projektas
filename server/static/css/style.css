@@ -118,8 +118,7 @@ footer {
     padding: 20px;
     margin-top: auto;
 }
-
-label {
+.register-label {
     display: block;
     margin: 0 auto;
     min-width: 200px;
@@ -127,9 +126,27 @@ label {
     padding-top: 16px;
 }
 
-input {
+.register-input {
     display: block;
     margin: 0 auto;
+}
+
+.article-label {
+    display: block;
+    margin: 0 10%;
+    min-width: 200px;
+    text-align: left;
+    padding-top: 16px;
+}
+
+.article-input {
+    display: block;
+    margin: 0 10%;
+}
+
+textarea {
+    display: block;
+    margin: 0 10%;
 }
 
 form {
@@ -173,4 +190,40 @@ form {
 
 .center-view {
     height: 50vh;
+}
+
+.card-title{
+    background: #888;
+    text-align: left;
+    padding:  6px 32px;
+    text-transform: uppercase;
+    box-shadow: 0 0 5px black;
+}
+
+.card-author {
+    font-size: 18px;
+    text-transform: initial;
+    font-style: italic;
+}
+
+.card-body{
+    font-size: 22px;
+    text-align: justify;
+    padding:  16px;
+}
+
+.card-board {
+    display: flex;
+    flex-direction: column;
+}
+
+.card {
+    background: #aaa;
+    width: 90%;
+    margin: 22px auto;
+    box-shadow: 0 0 5px black;
+}
+
+a {
+    color: inherit;
 }

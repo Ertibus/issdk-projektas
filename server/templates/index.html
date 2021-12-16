@@ -1,6 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="wrapper">
-Hello, World!
-</div>
+    <div class="card-board">
+    {% if is_loggedin %}
+        <a class="card" href="/article/create"><h2>Create a new article</h2></a>
+    {% endif %}
+    {% for article in articles %}
+    <a class="card" href="/article/{{article.id}}">
+        <h1 class="card-title">{{article.title}}<span class="card-author"> By {{article.owner}}</span></h1>
+        <div class="card-body">{{article.description}}</div>
+    </a>
+    <a class="card" href="/article/{{article.id}}">
+        <h1 class="card-title">{{article.title}}<span class="card-author"> By {{article.owner}}</span></h1>
+        <div class="card-body">{{article.description}}</div>
+    </a>
+    {% endfor %}
+    </div>
 {% endblock content %}
